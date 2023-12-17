@@ -1,0 +1,135 @@
+-- For products
+INSERT INTO products (product_id, product_name, description, price, stock, category) 
+SELECT 'P001', 'Laptop', 'High performance gaming laptop', 1499.99, 50, 'Electronics' FROM DUAL
+UNION ALL
+SELECT 'P002', 'Smartphone', 'Latest model with advanced features', 999.99, 100, 'Electronics' FROM DUAL
+UNION ALL
+SELECT 'P003', 'Headphones', 'Noise-cancelling, wireless headphones', 199.99, 75, 'Accessories' FROM DUAL;
+
+-- For credentials
+INSERT INTO credentials (login_id, password) VALUES ('L1', 'Pass1234');
+INSERT INTO credentials (login_id, password) VALUES ('L2', 'Secure9876');
+INSERT INTO credentials (login_id, password) VALUES ('L3', 'MyPassword');
+INSERT INTO credentials (login_id, password) VALUES ('L4', 'M121212');
+INSERT INTO credentials (login_id, password) VALUES ('L5', 'P121212');
+INSERT INTO credentials (login_id, password) VALUES ('L6', 'Q121212');
+
+-- For administrators
+INSERT INTO administrators (admin_id, name, email, phone_number, login_id) 
+VALUES ('A1', 'Alice Smith', 'alice.smith@email.com', '0987654321', 'L1');
+INSERT INTO administrators (admin_id, name, email, phone_number, login_id) 
+VALUES ('A2', 'Bob Brown', 'bob.brown@email.com', '0123456789', 'L2');
+INSERT INTO administrators (admin_id, name, email, phone_number, login_id) 
+VALUES ('A3', 'Carol White', 'carol.white@email.com', '9876543210', 'L3');
+
+-- For consumers
+INSERT INTO consumers (user_id, name, email, phone_number, login_id) 
+VALUES ('U1', 'John Doe', 'john.doe@email.com', '1234567890', 'L4');
+INSERT INTO consumers (user_id, name, email, phone_number, login_id) 
+VALUES ('U2', 'Jane Smith', 'jane.smith@email.com', '0987654321', 'L5');
+INSERT INTO consumers (user_id, name, email, phone_number, login_id) 
+VALUES ('U3', 'Alice Johnson', 'alice.johnson@email.com', '2345678901', 'L6');
+
+-- For brands
+INSERT INTO brands (brand_id, name) 
+SELECT 'B001', 'TechBrand' FROM DUAL
+UNION ALL
+SELECT 'B002', 'GadgetCorp' FROM DUAL
+UNION ALL
+SELECT 'B003', 'InnovateNow' FROM DUAL;
+
+-- For transactions
+INSERT INTO transactions (transaction_id, trx_date, amount) 
+SELECT 'T001', TO_DATE('2023-11-25', 'YYYY-MM-DD'), 2999 FROM DUAL
+UNION ALL
+SELECT 'T002', TO_DATE('2023-11-24', 'YYYY-MM-DD'), 1599 FROM DUAL
+UNION ALL
+SELECT 'T003', TO_DATE('2023-11-23', 'YYYY-MM-DD'), 499 FROM DUAL;
+
+-- For produces
+INSERT INTO produces (product_id, brand_id) 
+SELECT 'P001', 'B001' FROM DUAL
+UNION ALL
+SELECT 'P002', 'B002' FROM DUAL
+UNION ALL
+SELECT 'P003', 'B003' FROM DUAL;
+
+-- For purchases
+INSERT INTO purchases (product_id, user_id) 
+SELECT 'P001', 'U001' FROM DUAL
+UNION ALL
+SELECT 'P002', 'U002' FROM DUAL
+UNION ALL
+SELECT 'P003', 'U003' FROM DUAL;
+
+-- For productmanage
+INSERT INTO productmanage (product_id, admin_id) 
+SELECT 'P001', 'A001' FROM DUAL
+UNION ALL
+SELECT 'P002', 'A002' FROM DUAL
+UNION ALL
+SELECT 'P003', 'A003' FROM DUAL;
+
+-- For productaddition
+INSERT INTO productaddition (product_id, admin_id, date_added) 
+SELECT 'P001', 'A001', TO_DATE('2023-11-01', 'YYYY-MM-DD') FROM DUAL
+UNION ALL
+SELECT 'P002', 'A002', TO_DATE('2023-10-01', 'YYYY-MM-DD') FROM DUAL
+UNION ALL
+SELECT 'P003', 'A003', TO_DATE('2023-09-01', 'YYYY-MM-DD') FROM DUAL;
+
+-- For recordmanage
+INSERT INTO recordmanage (transaction_id, admin_id) 
+SELECT 'T001', 'A001' FROM DUAL
+UNION ALL
+SELECT 'T002', 'A002' FROM DUAL
+UNION ALL
+SELECT 'T003', 'A003' FROM DUAL;
+
+-- For usermanage
+INSERT INTO usermanage (user_id, admin_id) 
+SELECT 'U001', 'A001' FROM DUAL
+UNION ALL
+SELECT 'U002', 'A002' FROM DUAL
+UNION ALL
+SELECT 'U003', 'A003' FROM DUAL;
+
+-- For brandmanage
+INSERT INTO brandmanage (brand_id, admin_id) 
+SELECT 'B001', 'A001' FROM DUAL
+UNION ALL
+SELECT 'B002', 'A002' FROM DUAL
+UNION ALL
+SELECT 'B003', 'A003' FROM DUAL;
+
+-- For brandaddition
+INSERT INTO brandaddition (brand_id, admin_id, date_added) 
+SELECT 'B001', 'A001', TO_DATE('2023-01-01', 'YYYY-MM-DD') FROM DUAL
+UNION ALL
+SELECT 'B002', 'A002', TO_DATE('2023-02-01', 'YYYY-MM-DD') FROM DUAL
+UNION ALL
+SELECT 'B003', 'A003', TO_DATE('2023-03-01', 'YYYY-MM-DD') FROM DUAL;
+
+-- For useraddition
+INSERT INTO useraddition (user_id, admin_id, date_added) 
+SELECT 'U001', 'A001', TO_DATE('2023-01-01', 'YYYY-MM-DD') FROM DUAL
+UNION ALL
+SELECT 'U002', 'A002', TO_DATE('2023-02-15', 'YYYY-MM-DD') FROM DUAL
+UNION ALL
+SELECT 'U003', 'A003', TO_DATE('2023-03-20', 'YYYY-MM-DD') FROM DUAL;
+
+-- For maintainrecord
+INSERT INTO maintainrecord (product_id, transaction_id) 
+SELECT 'P001', 'T001' FROM DUAL
+UNION ALL
+SELECT 'P002', 'T002' FROM DUAL
+UNION ALL
+SELECT 'P003', 'T003' FROM DUAL;
+
+-- For productrecord
+INSERT INTO productrecord (date_added, product_id, transaction_id) 
+SELECT TO_DATE('2023-11-01', 'YYYY-MM-DD'), 'P001', 'T001' FROM DUAL
+UNION ALL
+SELECT TO_DATE('2023-11-10', 'YYYY-MM-DD'), 'P002', 'T002' FROM DUAL
+UNION ALL
+SELECT TO_DATE('2023-11-20', 'YYYY-MM-DD'), 'P003', 'T003' FROM DUAL;

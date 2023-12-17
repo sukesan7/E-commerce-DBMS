@@ -1,0 +1,133 @@
+-- Credentials Table
+CREATE TABLE credentials (
+    login_id VARCHAR2(10),
+    password VARCHAR2(16) CONSTRAINT pwd_not_null NOT NULL,
+    PRIMARY KEY (login_id)
+);
+
+-- Brands Table
+CREATE TABLE brands (
+    brand_id VARCHAR2(10),
+    name VARCHAR2(30) CONSTRAINT brand_name_not_null NOT NULL,
+    PRIMARY KEY (brand_id)
+);
+
+-- Transactions Table
+CREATE TABLE transactions (
+    transaction_id VARCHAR2(10),
+    trx_date DATE CONSTRAINT trx_date_not_null NOT NULL,
+    amount INTEGER CONSTRAINT trx_amount_not_null NOT NULL,
+    PRIMARY KEY (transaction_id)
+);
+
+-- Products Table
+CREATE TABLE products (
+    product_id VARCHAR2(10),
+    product_name VARCHAR2(20) CONSTRAINT name_not_null NOT NULL,
+    description VARCHAR2(100),
+    price NUMBER CONSTRAINT price_not_negative CHECK (price >= 0) CONSTRAINT price_not_null NOT NULL,
+    stock INTEGER CONSTRAINT stock_not_negative CHECK (stock >= 0) CONSTRAINT stock_not_null NOT NULL,
+    category VARCHAR2(20),
+    PRIMARY KEY (product_id)
+);
+
+-- Consumers Table
+CREATE TABLE consumers (
+    user_id VARCHAR2(10),
+    name VARCHAR2(30) CONSTRAINT consumer_name_not_null NOT NULL,
+    email VARCHAR2(30) CONSTRAINT email_format CHECK (email LIKE  '%@%') CONSTRAINT email_not_null NOT NULL,
+    phone_number VARCHAR2(10) CONSTRAINT phone_fixed_length CHECK (LENGTH(phone_number) = 10),
+    login_id REFERENCES credentials(login_id),
+    PRIMARY KEY (user_id)
+);
+
+-- Administrators Table
+CREATE TABLE administrators (
+    admin_id VARCHAR2(10),
+    name VARCHAR2(30) CONSTRAINT admin_name_not_null NOT NULL,
+    email VARCHAR2(30),
+    phone_number VARCHAR2(10),
+    login_id REFERENCES credentials(login_id),
+    PRIMARY KEY (admin_id)
+);
+
+-- ProductManage Table (Modified for BCNF)
+CREATE TABLE productManage(
+    product_id VARCHAR2(10) REFERENCES products(product_id),
+    admin_id VARCHAR2(10) REFERENCES administrators(admin_id),
+    PRIMARY KEY (product_id, admin_id)
+);
+
+-- Produces Table (Join Table)
+CREATE TABLE produces (
+    product_id VARCHAR2(10) REFERENCES products(product_id),
+    brand_id VARCHAR2(10) REFERENCES brands(brand_id),
+    PRIMARY KEY (product_id, brand_id)
+);
+
+-- Purchases Table (Join Table)
+CREATE TABLE purchases (
+    product_id VARCHAR2(10) REFERENCES products(product_id),
+    user_id VARCHAR2(10) REFERENCES consumers(user_id),
+    PRIMARY KEY (product_id, user_id)
+);
+
+-- MaintainRecord Table (Join Table)
+CREATE TABLE maintainRecord (
+    product_id VARCHAR2(10) REFERENCES products(product_id),
+    transaction_id VARCHAR2(10) REFERENCES transactions(transaction_id),
+    PRIMARY KEY (product_id, transaction_id)
+);
+
+-- RecordManage Table (Join Table)
+CREATE TABLE recordManage (
+    transaction_id VARCHAR2(10) REFERENCES transactions(transaction_id),
+    admin_id VARCHAR2(10) REFERENCES administrators(admin_id),
+    PRIMARY KEY (transaction_id, admin_id)
+);
+
+-- UserManage Table (Modified for BCNF)
+CREATE TABLE userManage (
+    user_id VARCHAR2(10) REFERENCES consumers(user_id),
+    admin_id VARCHAR2(10) REFERENCES administrators(admin_id),
+    PRIMARY KEY (user_id, admin_id)
+);
+
+-- New UserAddition Table
+CREATE TABLE userAddition (
+    user_id VARCHAR2(10) REFERENCES consumers(user_id),
+    admin_id VARCHAR2(10) REFERENCES administrators(admin_id),
+    date_added DATE,
+    PRIMARY KEY (user_id, admin_id, date_added)
+);
+
+-- BrandManage Table (Modified for BCNF)
+CREATE TABLE brandManage (
+    brand_id VARCHAR2(10) REFERENCES brands(brand_id),
+    admin_id VARCHAR2(10) REFERENCES administrators(admin_id),
+    PRIMARY KEY (brand_id, admin_id)
+);
+
+-- New BrandAddition Table
+CREATE TABLE brandAddition (
+    brand_id VARCHAR2(10) REFERENCES brands(brand_id),
+    admin_id VARCHAR2(10) REFERENCES administrators(admin_id),
+    date_added DATE,
+    PRIMARY KEY (brand_id, admin_id, date_added)
+);
+
+-- New ProductAddition Table
+CREATE TABLE productAddition (
+    product_id VARCHAR2(10) REFERENCES products(product_id),
+    admin_id VARCHAR2(10) REFERENCES administrators(admin_id),
+    date_added DATE,
+    PRIMARY KEY (product_id, admin_id, date_added)
+);
+
+-- ProductRecord Table (Join Table)
+CREATE TABLE productRecord (
+    date_added DATE,
+    product_id VARCHAR2(10) REFERENCES products(product_id),
+    transaction_id VARCHAR2(10) REFERENCES transactions(transaction_id),
+    PRIMARY KEY (product_id, transaction_id)
+);
